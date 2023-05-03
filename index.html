@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Calculator</title>
-</head>
-<body>
-    
-    <input class="output" placeholder="0" readonly />
-    <div class="keypad">
-        <button class="function ac" value="ac">AC</button>
-        <button class="function pm" value="+/-">+/-</button>
-        <button class="function percent" value="%">%</button>
+    <head>
+        <title>Calculator</title>
+    </head>
+    <body>
+       <input class="screen" placeholder="0" >
+       <div class="keypad">
+        <button class="ac function" value="ac">AC</button>
+        <button class="pm function" value="+/-">+/-</button>
+        <button class="percent function" value="%">%</button>
         <button class="operator division" value="/">/</button>
         <button class="number-7" value="7">7</button>
         <button class="number-8" value="8">8</button>
@@ -20,81 +18,70 @@
         <button class="number-5" value="5">5</button>
         <button class="number-6" value="6">6</button>
         <button class="operator subtraction" value="-">-</button>
-        <button class="number-1" value="1">1</button>
+        <button class="number-1" value="1">1</button> 
         <button class="number-2" value="2">2</button>
         <button class="number-3" value="3">3</button>
         <button class="operator addition" value="+">+</button>
         <button class="number-0" value="0">0</button>
-        <button class=" decimal" value=".">.</button>
-        <button class="operator equal" value="=">=</button>
-        
-    </div>
-    <script>
-        const outputElement = document.querySelector('.output');
-        const keypadElement = document.querySelector('.keypad');
-        let state = {leftHandSide: '', rightHandSide: ''};
-        function handleClick(event) {
-            if (event.target.tagName !== 'BUTTON') return;
+        <button class="decimal" value=".">.</button>
+        <button class="operator equal to" value="=">=</button>
+       </div>
+       <script>
+          
+          const screenElement = document.querySelector('.screen');
+          const keypadElement = document.querySelector('.keypad');
+          keypadElement.addEventListener('click', event => {
+            if (event.target.tagName !== 'BUTTON')
+            return
             const buttonValue = event.target.value;
-            const outputText = outputElement.value;
-            if (state.prevResult) {
-                outputElement.value = buttonValue;
-                state = {leftHandSide: '', rightHandSide: ''};
+            if (buttonValue === 'ac') {
+                screenElement.value = '';
+            } else if (buttonValue === '=') {
+                const equation = screenElement.value;
+                let operator;
+                if (equation.includes('+')) {
+                    operator = '+';
+                } else if (equation.includes('-')) {
+                    operator = '-';
+                }  else if (equation.includes('*')) {
+                    operator = '*';
+                }  else if (equation.includes('/')) {
+                    operator = '/';
+                }
+                const result = equation.split(operator);
+                const leftHandSide = parseFloat(result[0]);
+                const rightHandSide = parseFloat(result[1]);
+                if (operator === '+') {
+                    screenElement.value = leftHandSide + rightHandSide;
+                } else if (operator === '-') {
+                    screenElement.value = leftHandSide - rightHandSide;
+                } else if (operator === '*') {
+                    screenElement.value = leftHandSide * rightHandSide;
+                } else if (operator === '/') {
+                    screenElement.value = leftHandSide / rightHandSide;
+                }
             } else {
-                outputElement.value = outputText + buttonValue;
+                screenElement.value += buttonValue;
             }
+          });
+          
+        /*
+        main subject
+          |-- sub subject
+          Function
+            |-- holds the if/else block for the calculator
+               |-- AC Button
+               |   |-- clears the screen when it's been clicked
+               |-- '=' button 
+               |   |-- returns the result of the equation been executed.
+               |-- Other buttons
+                   |-- displays the buttons that has been clicked on the screen
 
-            switch(buttonValue) {
-                case 'ac':
-                    outputElement.value = '';
-                    state = {leftHandSide: '', rightHandSide: ''};
-                break;
-                case '+':
-                case '-':
-                case '*':
-                case '/':
-                    state.operator = buttonValue;
-                break;
-                case '.':
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    if (state.operator) {
-                        state.rightHandSide += buttonValue;
-                    } else {
-                        state.leftHandSide += buttonValue;
-                    }
-                break;
-                case '=':
-                    const leftHandSide = parseFloat(state.leftHandSide);
-                    const rightHandSide = parseFloat(state.rightHandSide);
-                    let result;
-                    if (state.operator === '*') {
-                        result = leftHandSide * rightHandSide;
-                    } else if (state.operator === '/') {
-                        result = leftHandSide / rightHandSide;
-                    } else if (state.operator === '+') {
-                        result = leftHandSide + rightHandSide;
-                    } else if (state.operator === '-') {
-                        result = leftHandSide - rightHandSide;
-                    }
-                    outputElement.value = result;
-                    state.prevResult = outputElement.value;
-                break;
-            }
-        }
-        keypadElement.addEventListener('click', handleClick);
-    </script>
-    <style>
 
-        .output {
+        */
+       </script>
+       <style>
+        .screen {
                 font-size: 64px;
                 font-weight: 300;
                 margin-bottom: 5px;
@@ -125,7 +112,6 @@
             grid-template-rows: repeat(4, 1fr);
             grid-template-columns: repeat(4, 1fr);
             grid-gap: 10px;
-            
         }
         button.function {
             color: black;
@@ -141,7 +127,6 @@
             width: auto;
             justify-content: flex-start;
         }
-          
-    </style>
-</body>
+       </style>
+    </body>
 </html>
